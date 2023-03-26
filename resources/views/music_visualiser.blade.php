@@ -5,26 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>visualser</title>
     <link rel="stylesheet" href="/css/1.css">
+    <script type="text/javascript" src="dist/html2canvas.js"></script>
 </head>
 <body>
+   
     
     <div id="content" >
         <input type="file" id="thefile" accept="audio/*" />
-        
-        <canvas id="canvas2"  style="z-index: 2;">
+        {{-- <img src="/img/2.jpg" id="img" class="box" style="z-index: 3;"/> --}}
+
+        <canvas id="canvas2" class="box"  style="z-index: 2;">
           
 
-        </canvas>
-       
-        <canvas id="canvas" class="box" style="z-index: 1;"></canvas>
-   
- 
-        <audio id="audio" controls style="z-index:20"></audio>
-      </div>
-     
-
+        </canvas>   
+        <canvas id="canvas" class="box" style="z-index: 3;"></canvas>
+        
       
+   
+      
+    </div>
 
+    <div style="display: none;">
+        <video controls autoplay playsinline id="preview-video"></video>
+    </div>
+    <canvas id="background-canvas" style="position:absolute; top:-99999999px; left:-9999999999px;"></canvas>
+    <button id="btn-start-recording">Start Recording</button>
+    <button id="btn-stop-recording" disabled>Stop Recording</button>
+
+    <audio id="audio" controls style="z-index:20"></audio>
+      <button id="stop" style="cursor: pointer;z-index: 999999; position: relative;left: 40%;top: 50%;" onclick="stop()">stop</button>
+      <button id="start" style="cursor: pointer;z-index: 999999; position: relative;left: 45%;top: 50%;" >start</button>
+      
+      <video id="myVideo" controls="controls" style="cursor: pointer;z-index: 999999; position: absolute;left: 30%;"></video>
+      <a id="dl" href="" download="download.mp4" style="cursor: pointer;z-index: 999999; position: absolute;left: 80%;"></a>
+     <div id="message"></div>
+      <canvas  id="output"></canvas> 
+<video id="output-video" controls="controls" style="cursor: pointer;z-index: 999999; position: absolute;left: 80%;"></video>
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.8.1/dist/ffmpeg.min.js"></script>
+     <script src="/js/3.js"></script>   
       <script src="/js/1.js"></script>
+      <!-- <script src="4.js"></script>
+      <script src="https://www.webrtc-experiment.com/html2canvas.min.js"></script> -->
+      <!-- <script type="text/javascript" src="html2canvas-master/dist/html2canvas.js"></script> -->
+<script>
+   
+var elementToRecord = document.getElementById('content');
+var canvas2d = document.getElementById('background-canvas');
+var context = canvas2d.getContext('2d');
+
+canvas2d.width = elementToRecord.clientWidth;
+canvas2d.height = elementToRecord.clientHeight;
+
+var isRecordingStarted = false;
+var isStoppedRecording = false;
+
+
+
+(function looper() {
+    if(!isRecordingStarted) {
+        return setTimeout(looper, 500);
+    }
+
+    html2canvas(elementToRecord,{useCORS: true, scale:1,allowTaint:true}).then(function(canvas) {
+        context.clearRect(0, 0, canvas2d.width, canvas2d.height);
+        context.drawImage(canvas, 0, 0, canvas2d.width, canvas2d.height);
+
+        if(isStoppedRecording) {
+            return;
+        }
+
+        requestAnimationFrame(looper);
+    });
+})();
+
+var recorder = new RecordRTC(canvas2d, {
+    type: 'canvas'
+});
+
+document.getElementById('btn-start-recording').onclick = function() {
+    this.disabled = true;
+    
+    isStoppedRecording =false;
+    isRecordingStarted = true;
+
+    recorder.startRecording();
+    document.getElementById('btn-stop-recording').disabled = false;
+};
+
+document.getElementById('btn-stop-recording').onclick = function() {
+    this.disabled = true;
+    
+    recorder.stopRecording(function() {
+        isRecordingStarted = false;
+        isStoppedRecording = true;
+
+        var blob = recorder.getBlob();
+        // document.getElementById('preview-video').srcObject = null;
+        document.getElementById('preview-video').src = URL.createObjectURL(blob);
+        document.getElementById('preview-video').parentNode.style.display = 'block';
+        // elementToRecord.style.display = 'none';
+
+        // window.open(URL.createObjectURL(blob));
+    });
+};
+
+
+</script>
+<script src="https://www.webrtc-experiment.com/common.js"></script>
 </body>
 </html>

@@ -21,3 +21,9 @@ Route::get("/image",[ToImageController::class,'tovideo']);
 Route::get('/visualiser',function(){
     return view('/music_visualiser');
 });
+Route::get('/vis2',function(){
+    return view('/vis2');
+});
+Route::get('/convert',function(){
+    return view('/convert');
+});

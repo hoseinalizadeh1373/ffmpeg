@@ -1,6 +1,6 @@
 *{
   padding: 0;
-  margin: 0e;
+  margin: 0;
 }
 #thefile {
     position: fixed;
@@ -10,19 +10,34 @@
   }
   
   #canvas {
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
   }
-  
+ #img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+  #output{
+    position: relative;
+    left: 0;
+    top: 30%;
+    width: 30%;
+    height: 400px;
+
+  }
   audio {
     position: fixed;
     left: 10px;
     bottom: 10px;
     width: calc(100% - 20px);
-    /* color: #948e8e09; */
+    /* color: #e4dddd05; */
   }
 
   .box {
@@ -32,5 +47,48 @@
     top: 0;
     left: 0;
    
+   
   }
- 
+ #content{
+  width: 50%;
+  height: 50%;
+  background: gray;
+  border-radius: 25px;
+  border: 2px slateblue;
+  position: relative;
+  top: 10px;
+  left: 20%;
+  
+ }
+
+ .anim{
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  position: relative;
+  animation-name: example;
+  animation-duration: 4s;
+  animation-delay: 0s;
+}
+
+@keyframes example {
+  0%   {background-color:red; left:0px; top:0px;}
+  25%  {background-color:yellow; left:200px; top:0px;}
+  50%  {background-color:blue; left:200px; top:200px;}
+  75%  {background-color:green; left:0px; top:200px;}
+  100% {background-color:red; left:0px; top:0px;}
+}
+#wrapper{
+  position:relative;
+  width:300px;
+  height:200px;
+}
+#canvasTop,#canvasBottom{
+  position:absolute; top:0px; left:0px;
+  border:1px solid green;
+  width:300px;
+  height:200px;
+}
+#canvasTop{
+  border:1px solid red;
+}

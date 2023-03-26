@@ -21,7 +21,7 @@ window.onload = function() {
      
       ctx = canvas.getContext("2d");
       ctx2 = canvas2.getContext("2d");
-      ctx.globalAlpha =0.2;
+     ctx.globalAlpha =0.9;
       
 
        make_image();
@@ -36,24 +36,29 @@ window.onload = function() {
   
       var dataArray = new Uint8Array(bufferLength);
   
-      var WIDTH = canvas.width;
-      var HEIGHT = canvas.height;
-  
+      var WIDTH = canvas2.width;
+      var HEIGHT = canvas2.height;
+     // draw(WIDTH,HEIGHT);
       var barWidth = (WIDTH / bufferLength) * 2.5;
       var barHeight;
       var x = 0;
-    
+     // ctx.fillStyle = "#000";
+      //ctx.fillRect(0, 0, WIDTH, HEIGHT);
       function renderFrame() {
         requestAnimationFrame(renderFrame);
+        
+        
   
         x = 0;
-  
+ 
         analyser.getByteFrequencyData(dataArray);
     
-        ctx2.fillStyle = "#fff";
-        ctx2.fillRect(0, 0, WIDTH, HEIGHT);
+       
+        ctx2.fillStyle = "blue";
+        ctx2.fillRect(0, HEIGHT-barHeight+500, barWidth, barHeight);
   
         for (var i = 0; i < bufferLength; i++) {
+
           barHeight = dataArray[i];
           
           var r = barHeight + (25 * (i/bufferLength));
@@ -63,7 +68,9 @@ window.onload = function() {
           ctx2.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
           ctx2.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
   
+        
           x += barWidth + 1;
+        
         }
       
       }
@@ -71,16 +78,29 @@ window.onload = function() {
       audio.play();
       renderFrame();
     };
+    function draw(width,height) {
+      // var c = document.getElementById("myCanvas");
+      // var ctx = c.getContext("2d");
+     // ctx2.clearRect(0, 0, window.innerWidth,window.innerHeight); 
+      var img = document.getElementById("img")
+      var pat = ctx.createPattern(img, 'repeat');
+      ctx.rect(0, 0, width,height);
+      ctx.fillStyle = pat;
+      ctx.fill();
+    }
+
     function make_image(){
         baseimage = new Image();
         baseimage.src = '/img/2.jpg';
       
       
         baseimage.onload =function(){
-            ctx.drawImage(baseimage,0,0,window.innerWidth,window.innerHeight);
+            ctx2.drawImage(baseimage,0,0,window.innerWidth,window.innerHeight);
+            // ctx2.drawImage(canvas, 0, 0);
         }
         
     }
+ 
   };
   
   
