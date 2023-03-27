@@ -21,10 +21,10 @@ window.onload = function() {
      
       ctx = canvas.getContext("2d");
       ctx2 = canvas2.getContext("2d");
-     ctx.globalAlpha =0.9;
+     //ctx.globalAlpha =0.9;
       
 
-       make_image();
+       //make_image();
   
       src.connect(analyser);
       analyser.connect(context.destination);
@@ -38,7 +38,7 @@ window.onload = function() {
   
       var WIDTH = canvas2.width;
       var HEIGHT = canvas2.height;
-     // draw(WIDTH,HEIGHT);
+      draw(3500,3500);
       var barWidth = (WIDTH / bufferLength) * 2.5;
       var barHeight;
       var x = 0;
@@ -54,8 +54,15 @@ window.onload = function() {
         analyser.getByteFrequencyData(dataArray);
     
        
-        ctx2.fillStyle = "blue";
-        ctx2.fillRect(0, HEIGHT-barHeight+500, barWidth, barHeight);
+        // ctx2.fillStyle = "blue";
+        // ctx2.fillRect(0, HEIGHT-barHeight+500, barWidth, barHeight);
+
+        var my_gradient = ctx2.createLinearGradient(100, 0, 0, 170);
+        my_gradient.addColorStop(0, "gray");
+        my_gradient.addColorStop(0.5, "#fff");
+        my_gradient.addColorStop(1, "#f3efef0e");
+        ctx2.fillStyle = my_gradient;
+        ctx2.fillRect(0, HEIGHT-300, WIDTH, HEIGHT);
   
         for (var i = 0; i < bufferLength; i++) {
 
@@ -83,10 +90,10 @@ window.onload = function() {
       // var ctx = c.getContext("2d");
      // ctx2.clearRect(0, 0, window.innerWidth,window.innerHeight); 
       var img = document.getElementById("img")
-      var pat = ctx.createPattern(img, 'repeat');
-      ctx.rect(0, 0, width,height);
-      ctx.fillStyle = pat;
-      ctx.fill();
+      var pat = ctx2.createPattern(img, 'repeat');
+      ctx2.rect(0, 0, width,height);
+      ctx2.fillStyle = pat;
+      ctx2.fill();
     }
 
     function make_image(){
