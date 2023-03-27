@@ -24,6 +24,9 @@ Route::get('/visualiser',function(){
 Route::get('/vis2',function(){
     return view('/vis2');
 });
+Route::get('/visualiser2',function(){
+    return view('/visualiser2');
+});
 Route::get('/convert',function(){
     return view('/convert');
 });

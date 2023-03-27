@@ -12,7 +12,7 @@
     
     <div id="content" >
         <input type="file" id="thefile" accept="audio/*" />
-        {{-- <img src="/img/2.jpg" id="img" class="box" style="z-index: 3;"/> --}}
+        <img src="/img/2.jpg" id="img"  width="2" height="2"/>
 
         <canvas id="canvas2" class="box"  style="z-index: 2;">
           
@@ -47,7 +47,8 @@
       <!-- <script src="4.js"></script>
       <script src="https://www.webrtc-experiment.com/html2canvas.min.js"></script> -->
       <!-- <script type="text/javascript" src="html2canvas-master/dist/html2canvas.js"></script> -->
-<script>
+
+{{-- <script>
    
 var elementToRecord = document.getElementById('content');
 var canvas2d = document.getElementById('background-canvas');
@@ -110,7 +111,7 @@ document.getElementById('btn-stop-recording').onclick = function() {
 };
 
 
-</script>
+</script> --}}
 <script src="https://www.webrtc-experiment.com/common.js"></script>
 </body>
 </html>

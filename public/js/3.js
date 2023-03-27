@@ -4,13 +4,13 @@ const ffmpeg = createFFmpeg({
 });
 
 const transcode = async (webcamData) => {
-  const message = document.getElementById('message');
+  //const message = document.getElementById('message');
   const name = 'record.mp4';
   await ffmpeg.load();
-  message.innerHTML = 'Start transcoding';
+ // message.innerHTML = 'Start transcoding';
   await ffmpeg.write(name, webcamData);
   await ffmpeg.transcode(name,  'output.mp4');
-  message.innerHTML = 'Complete transcoding';
+  //message.innerHTML = 'Complete transcoding';
   const data = ffmpeg.read('output.mp4');
 
   const video = document.getElementById('output-video');
@@ -28,7 +28,7 @@ var recordedChunks = [];
 
 var time = 0;
 
-var canvas = document.getElementById("canvas2");
+var canvas = document.getElementById("canvas");
 
 return new Promise(function (res, rej) {
     var stream = canvas.captureStream(60);
