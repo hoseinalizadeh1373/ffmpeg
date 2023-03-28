@@ -27,6 +27,9 @@ Route::get('/vis2',function(){
 Route::get('/visualiser2',function(){
     return view('/visualiser2');
 });
+Route::get('/concat',function(){
+    return view('/concat');
+});
 Route::get('/convert',function(){
     return view('/convert');
 });

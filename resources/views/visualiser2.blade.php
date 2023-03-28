@@ -13,7 +13,7 @@
       <video id="output-video" controls="controls" style="cursor: pointer;z-index: 999999; position: absolute;left: 80%;"></video>
       <a id="dl" href="" download="download.mp4" style="cursor: pointer;z-index: 999999; position: absolute;left: 80%;"></a>
       <video id="myVideo" controls="controls" style="cursor: pointer;z-index: 999999; position: absolute;left: 30%;"></video>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" width="500" height="300"></canvas>
     <h3 id="name"></h3>
 
     <img src="/img/2.jpg" width="8" height="8" id="img">
@@ -101,7 +101,7 @@ file.onchange = function() {
 
   let barHeight;
   let x = 0;
-//   make_image();
+   //make_image();
 
 
   function renderFrame() {
@@ -113,10 +113,12 @@ file.onchange = function() {
     // Results in a normalized array of values between 0 and 255
     // Before this step, dataArray's values are all zeros (but with length of 8192)
    
-    ctx.fillStyle = "rgba(0,0,0,0.2)"; // Clears canvas before rendering bars (black with opacity 0.2)
-    ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fade effect, set opacity to 1 for sharper rendering of bars
-
-    draw(WIDTH,HEIGHT);
+    // ctx.fillStyle = "rgba(0,0,0,0.2)"; // Clears canvas before rendering bars (black with opacity 0.2)
+    // ctx.fillRect(0, 0, WIDTH, HEIGHT); // Fade effect, set opacity to 1 for sharper rendering of bars
+    // make_image();
+     draw(WIDTH,HEIGHT);
+    
+    
     let r, g, b;
     let bars = 118 // Set total number of bars you want per frame
 
@@ -178,8 +180,8 @@ function make_image(){
       // var ctx = c.getContext("2d");
      // ctx2.clearRect(0, 0, window.innerWidth,window.innerHeight); 
       var img = document.getElementById("img")
-      var pat = ctx.createPattern(img, 'repeat');
-      ctx.rect(0, 0, width,height);
+      var pat = ctx.createPattern(img, 'no-repeat');
+      ctx.rect(0, 0, window.innerWidth,window.innerHeight);
       ctx.fillStyle = pat;
       ctx.fill();
     }
