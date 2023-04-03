@@ -23,13 +23,13 @@
 
 const fetching = Promise.all( [
   // the video "only" file
-  fetchData( "https://dl.dropboxusercontent.com/s/u9ycdfwy8fig4dl/bbb_video.mp4" ),
+  fetchData( "/bbb_video.mp4" ),
   // the audio "only" file
-  fetchData( "/asset/Ringtone-3.mp3" )
+  fetchData( "/332.mp4" )
 ] );
 
 const video_mime = "video/mp4; codecs=avc1.64000c";
-const audio_mime = "audio/mpeg;codecs=mp3";
+  const audio_mime = "audio/mp4; codecs=mp4a.40.2";
 if(
   !MediaSource.isTypeSupported( video_mime ) ||
   !MediaSource.isTypeSupported( audio_mime )

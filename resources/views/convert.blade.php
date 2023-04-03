@@ -1,40 +1,77 @@
 
-<body>
-    <video id="player" controls></video>
-    <input type="file" id="uploader">
-   <script>
-           if (!crossOriginIsolated) SharedArrayBuffer = ArrayBuffer;
-    </script>
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.8.1/dist/ffmpeg.min.js"></script>
-    <script>
-      const { createFFmpeg, fetchFile } = FFmpeg;
-      const ffmpeg = createFFmpeg({ log: true });
-      const sourceBuffer = await fetch("/1.mp4").then(r => r.arrayBuffer());
+ 
+  <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Page Title</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</head>
+	<body>
+		<video width="480" height="320" controls muted loop></video>
+		<script src="/js/5.js"></script>
+		<script>
+      (async () => {
+	const videoElement = document.querySelector('video');
 
-// create the FFmpeg instance and load it
-const ffmpeg = createFFmpeg({ log: true });
-// await ffmpeg.load();
+	// Create a MediaSource instance and connect it to video element
+	const mediaSource = new MediaSource();
+	// This creates a URL that points to the media buffer,
+	// and assigns it to the video element src
+	videoElement.src = URL.createObjectURL(mediaSource);
 
-// write the AVI to the FFmpeg file system
-ffmpeg.FS(
-  "writeFile",
-  "/1.mp4",
-  new Uint8Array(sourceBuffer, 0, sourceBuffer.byteLength)
-);
+	// Video that will be fetched and appended
+	const remoteVidUrl = `/1.mp4`;
 
-// run the FFmpeg command-line tool, converting the AVI into an MP4
-await ffmpeg.run("-i", "/1.mp4", "/outputdsds.mp4");
+	// Fetch remote URL, getting contents as binary blob
+	const vidBlob = await (await fetch(remoteVidUrl)).blob();
+	// We need array buffers to work with media source
+	const vidBuff = await vidBlob.arrayBuffer();
 
-// read the MP4 file back from the FFmpeg file system
-const output = ffmpeg.FS("readFile", "outputdsds.mp4");
+	/**
+	 * Before we can actually add the video, we need to:
+	 *  - Create a SourceBuffer, attached to the MediaSource object
+	 *  - Wait for the SourceBuffer to "open"
+	 */
+	/** @type {SourceBuffer} */
+	const sourceBuffer = await new Promise((resolve, reject) => {
+		const getSourceBuffer = () => {
+			try {
+				const sourceBuffer = mediaSource.addSourceBuffer(`video/mpeg; codecs="vp9,opus"`);
+				resolve(sourceBuffer);
+			} catch (e) {
+				reject(e);
+			}
+		};
+		if (mediaSource.readyState === 'open') {
+			getSourceBuffer();
+		} else {
+			mediaSource.addEventListener('sourceopen', getSourceBuffer);
+		}
+	});
 
-// ... and now do something with the file
-const video = document.getElementById("video");
-video.src = URL.createObjectURL(
-  new Blob([output.buffer], { type: "video/mp4" })
-);
-      document
-        .getElementById('uploader').addEventListener('change', transcode);
-    </script>
+	// Now that we have an "open" source buffer, we can append to it
+	sourceBuffer.appendBuffer(vidBuff);
+	// Listen for when append has been accepted and
+	// You could alternative use `.addEventListener` here instead
+	sourceBuffer.onupdateend = () => {
+		// Nothing else to load
+		mediaSource.endOfStream();
+		// Start playback!
+		// Note: this will fail if video is not muted, due to rules about
+		// autoplay and non-muted videos
+		videoElement.play();
+	};
+
+	// Debug Info
+	console.log({
+		sourceBuffer,
+		mediaSource,
+		videoElement
+	});
+})();
+</script>
+	</body>
+</html>
     
-  </body>
