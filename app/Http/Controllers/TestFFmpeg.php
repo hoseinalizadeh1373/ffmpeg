@@ -16,9 +16,10 @@ class TestFFmpeg extends Controller
         // $video->addFilter(new \FFMpeg\Filters\Audio\SimpleFilter(array('-i ' .'/3323.mp3', '-shortest')));
 
         // $video->save(new \FFMpeg\Format\Video\X264(), 'testoutput.mp4');
-        FFMpeg::fromDisk('local')->open('/1.mp4')->addFilter(function ($filters) {
-            $filters->resize(new \FFMpeg\Coordinate\Dimension(140, 80));
-        });
+        FFMpeg::fromDisk('local')->open('/1.mp4')->addFilter(['-i','3323.mp3','-shortest'])
+        ->export()->toDisk('local')->inFormat(new \FFMpeg\Format\Video\X264)
+        ->save('short_steve.mkv');
+        ;
     // ->export()
     // ->onProgress(function ($percentage, $remaining, $rate) {
     //     echo "{$remaining} seconds left at rate: {$rate}";

@@ -7,71 +7,78 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<title>Page Title</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="https://vjs.zencdn.net/8.0.4/video-js.css" rel="stylesheet" />
 	</head>
 	<body>
-		<video width="480" height="320" controls muted loop></video>
-		<script src="/js/5.js"></script>
-		<script>
-      (async () => {
-	const videoElement = document.querySelector('video');
+		<script src="https://vjs.zencdn.net/8.0.4/video.min.js"></script>
+		{{-- <audio id="my-audio-track" src="/3323.mp3"></audio> --}}
+		<video class="video-js" id="my-player"  controls>
+			<source id="my-spanish-audio-track" src="/bbb_video.mp4" >
+			<source id="my-audio-track" src="/3323.mp3" >
+		   </video>
+		 
+		   <script type="text/javascript">
+		   video = document.getElementById("my-player");
+		   
+	
+// console.log(video);
+// 		video.audioTracks[0].enabled=false;
+// 		video.audioTracks[1].enabled=true;
 
-	// Create a MediaSource instance and connect it to video element
-	const mediaSource = new MediaSource();
-	// This creates a URL that points to the media buffer,
-	// and assigns it to the video element src
-	videoElement.src = URL.createObjectURL(mediaSource);
+		var player = videojs('my-player');
 
-	// Video that will be fetched and appended
-	const remoteVidUrl = `/1.mp4`;
+// Create a track object.
+var track = new videojs.AudioTrack({
+  id: 'my-spanish-audio-track',
+  kind: 'tr',
+  label: 'Spanish',
+  language: 'es',
+  default:true
+});
+var track2 = new videojs.AudioTrack({
+  id: 'my-audio-track',
+  kind: 'translation',
+  label: 'italy',
+  language: 'fr',
+  default:true
+});
 
-	// Fetch remote URL, getting contents as binary blob
-	const vidBlob = await (await fetch(remoteVidUrl)).blob();
-	// We need array buffers to work with media source
-	const vidBuff = await vidBlob.arrayBuffer();
+// Add the track to the player's audio track list.
+player.audioTracks().addTrack(track);
+player.audioTracks().addTrack(track2);
 
-	/**
-	 * Before we can actually add the video, we need to:
-	 *  - Create a SourceBuffer, attached to the MediaSource object
-	 *  - Wait for the SourceBuffer to "open"
-	 */
-	/** @type {SourceBuffer} */
-	const sourceBuffer = await new Promise((resolve, reject) => {
-		const getSourceBuffer = () => {
-			try {
-				const sourceBuffer = mediaSource.addSourceBuffer(`video/mpeg; codecs="vp9,opus"`);
-				resolve(sourceBuffer);
-			} catch (e) {
-				reject(e);
-			}
-		};
-		if (mediaSource.readyState === 'open') {
-			getSourceBuffer();
-		} else {
-			mediaSource.addEventListener('sourceopen', getSourceBuffer);
-		}
-	});
+var audioTrackList = player.audioTracks();
+for (var i = 0; i < audioTrackList.length; i++) {
+    var track = audioTrackList[i];
+	console.log(track.label)
+    if (track.enabled) {
+    //   videojs.log(track.label);
+	  
+     
+    }
+  }
+// Listen to the "change" event.
+audioTrackList.addEventListener('change', function() {
 
-	// Now that we have an "open" source buffer, we can append to it
-	sourceBuffer.appendBuffer(vidBuff);
-	// Listen for when append has been accepted and
-	// You could alternative use `.addEventListener` here instead
-	sourceBuffer.onupdateend = () => {
-		// Nothing else to load
-		mediaSource.endOfStream();
-		// Start playback!
-		// Note: this will fail if video is not muted, due to rules about
-		// autoplay and non-muted videos
-		videoElement.play();
-	};
+  // Log the currently enabled AudioTrack label.
+  for (var i = 0; i < audioTrackList.length; i++) {
+    var track = audioTrackList[i];
 
-	// Debug Info
-	console.log({
-		sourceBuffer,
-		mediaSource,
-		videoElement
-	});
-})();
-</script>
+    if (track.enabled) {
+      videojs.log(track.label);
+	  console.log(track.label)
+      return;
+    }
+  }
+});
+// var track = player.audioTracks().getTrackById('my-spanish-audio-track');
+// console.log(track)
+// // Remove it from the audio track list.
+// player.audioTracks().removeTrack(track);
+
+		   </script>
+
+		  
 	</body>
 </html>
     
