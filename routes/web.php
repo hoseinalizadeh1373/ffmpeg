@@ -34,4 +34,6 @@ Route::get('/concat',function(){
 Route::get('/convert',function(){
     return view('/convert');
 });
-Route::get('/static',[TestFFmpeg::class,'ffmpeg']);
+Route::get('/static',function(){
+    return view('static');
+});
