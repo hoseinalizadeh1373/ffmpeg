@@ -26,7 +26,7 @@ class ToImageController extends Controller
         //command for every 1 second image change in video
 
        $r = exec($command1);
-       dd($command1);
+    //    dd($command1);
         dd($r);
     }
 
